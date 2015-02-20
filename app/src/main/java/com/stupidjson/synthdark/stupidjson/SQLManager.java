@@ -49,15 +49,11 @@ public class SQLManager extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Images newImage = new Images();
-                List<String> imageDataList = new ArrayList<String>();
-                for (int i = 0; i<5; i++) {
-                    imageDataList.add(cursor.getString(i));
-                }
-                newImage.ID = Integer.parseInt(imageDataList.get(0).toString());
-                newImage.ImageID = Integer.parseInt(imageDataList.get(1).toString());
-                newImage.Title = imageDataList.get(2).toString();
-                newImage.UserID = Integer.parseInt(imageDataList.get(3).toString());
-                newImage.UserName = imageDataList.get(4).toString();
+                newImage.ID = Integer.parseInt(cursor.getString(0).toString());
+                newImage.ImageID = Integer.parseInt(cursor.getString(1).toString());
+                newImage.Title = cursor.getString(2).toString();
+                newImage.UserID = Integer.parseInt(cursor.getString(3).toString());
+                newImage.UserName = cursor.getString(4).toString();
                 imageList.add(newImage);
             } while (cursor.moveToNext());
         }

@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.media.Image;
 import android.os.AsyncTask;
 import android.view.Display;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -25,17 +26,17 @@ import java.util.List;
 public class ImageDownloader extends AsyncTask<String, String, Void> {
 
     MainActivity mainActivity;
+    List<Images> imageList;
     int imageID;
     int screenWidth;
     int screenHeight;
     Bitmap image;
-    int id;
 
 
-    public ImageDownloader(MainActivity mainActivity, int id, int imageID) {
+    public ImageDownloader(MainActivity mainActivity, List<Images> imageList, int imageID) {
         this.mainActivity = mainActivity;
+        this.imageList = imageList;
         this.imageID = imageID;
-        this.id = id;
 
         Display display = mainActivity.getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -50,7 +51,7 @@ public class ImageDownloader extends AsyncTask<String, String, Void> {
     @Override
     protected Void doInBackground(String... params) {
 
-        String url_select = "http://challenge.superfling.com/photos/" + imageID;
+        String url_select = "http://challenge.superfling.com/photos/" + imageList.get(imageID).ImageID;
         int inSampleSize = 1;
 
         try {
@@ -122,6 +123,6 @@ public class ImageDownloader extends AsyncTask<String, String, Void> {
     }
 
     protected void onPostExecute(Void v) {
-        mainActivity.AddImage(id, image);
+        mainActivity.AddImage(imageID, image);
     }
 }

@@ -25,17 +25,19 @@ public class MainActivity extends ActionBarActivity {
     SQLManager sqlManager;
     JSONReader jsonReader;
 
+    CustomAdapter adapter;
     ListView listView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        imageList = new ArrayList<Images>();
         sqlManager = new SQLManager(this, this);
-        LoadImages();
 
-        setContentView(R.layout.activity_main);
+        LoadImages();
     }
 
     public void ExecuteJSONReader() {
@@ -51,18 +53,20 @@ public class MainActivity extends ActionBarActivity {
     public void LoadImages() {
         imageList = sqlManager.LoadImageData();
 
+        adapter = new CustomAdapter(this, imageList);
         listView = (ListView) findViewById(R.id.listView);
-        listView.setAdapter(new CustomAdapter(this, imageList));
+        listView.setAdapter(adapter);
 
         for (int i=0; i<imageList.size(); i++) {
             System.out.println(imageList.get(i).ID + ", " + imageList.get(i).ImageID + ", " + imageList.get(i).Title + ", " + imageList.get(i).UserID + ", " + imageList.get(i).UserName);
-            ImageDownloader imageDownloader = new ImageDownloader(this, i, imageList.get(i).ImageID);
+            ImageDownloader imageDownloader = new ImageDownloader(this, imageList, i);
             imageDownloader.execute();
         }
     }
 
-    public void AddImage (int i, Bitmap image){
-        imageList.get(i).image = image;
+    public void AddImage(int imageID, Bitmap image) {
+        imageList.get(imageID).image = image;
+        adapter.notifyDataSetChanged();
     }
 
     @Override
